@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="af">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d0d1a" />
+  <title>Bitcoin in Orania</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" crossorigin="" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="topbar" role="banner">
+    <h1 class="topbar__title">Bitcoin in Orania</h1>
+    <div class="topbar__actions">
+      <div class="seg" role="group" aria-label="Aansig">
+        <button type="button" class="seg__btn is-active" id="btn-view-map" data-view="map" aria-pressed="true">Kaart</button>
+        <button type="button" class="seg__btn" id="btn-view-list" data-view="list" aria-pressed="false">Lys</button>
+      </div>
+      <button type="button" class="iconbtn" id="btn-theme" aria-label="Wissel tema" title="Tema">◐</button>
+    </div>
+  </header>
+
+  <div class="filter-bar" id="filter-bar">
+    <div class="chips" id="category-chips" role="group" aria-label="Kategorieë (kaart en lys)"></div>
+    <div class="map-opts" id="map-opts">
+      <label class="map-opts__label">
+        <input type="checkbox" id="pin-labels-toggle" />
+        <span class="map-opts__text">Wys name by merkers</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="search-row" id="search-row" hidden>
+    <label class="visually-hidden" for="list-search">Soek besighede</label>
+    <input type="search" id="list-search" class="search-input" placeholder="Soek…" autocomplete="off" />
+  </div>
+
+  <main class="app-main">
+    <section class="view view--map" id="view-map" aria-label="Kaart">
+      <div id="map" class="map-root"></div>
+    </section>
+
+    <section class="view view--list" id="view-list" hidden aria-label="Gids">
+      <ul class="biz-list" id="list-items"></ul>
+    </section>
+  </main>
+
+  <!-- Drawer: besigheid -->
+  <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+  <aside class="drawer" id="drawer" aria-hidden="true" role="dialog" aria-label="Besigheid">
+    <div class="drawer__handle" aria-hidden="true"></div>
+    <button type="button" class="drawer__close" id="drawer-close" aria-label="Sluit">×</button>
+    <div class="drawer__head">
+      <div class="drawer__icon" id="drawer-icon" aria-hidden="true"></div>
+      <h2 class="drawer__title" id="drawer-title"></h2>
+    </div>
+    <p class="drawer__cat" id="drawer-cat"></p>
+    <div class="drawer__links" id="drawer-links" hidden>
+      <a class="drawer__web" id="drawer-web" href="#" target="_blank" rel="noopener noreferrer" hidden>Webwerf</a>
+      <a class="drawer__web" id="drawer-web-2" href="#" target="_blank" rel="noopener noreferrer" hidden>Oewer Hotel</a>
+    </div>
+    <div class="drawer__row">
+      <button type="button" class="btn btn--primary" id="drawer-btn-pay">Betaal</button>
+      <button type="button" class="btn btn--secondary" id="drawer-btn-tip">Fooitjie</button>
+    </div>
+    <button type="button" class="btn-ghost" id="drawer-goto-map" hidden>Maak oop op kaart</button>
+    <button type="button" class="btn-text" id="drawer-btn-more" aria-expanded="false">Meer inligting</button>
+    <div class="drawer__more" id="drawer-more" hidden>
+      <p class="drawer__desc" id="drawer-desc"></p>
+      <h3 class="drawer__sub">Fisiese adres</h3>
+      <p class="drawer__addr" id="drawer-addr">—</p>
+      <h3 class="drawer__sub">Foon</h3>
+      <p class="drawer__foon" id="drawer-foon">—</p>
+      <h3 class="drawer__sub">E-pos</h3>
+      <p class="drawer__epos" id="drawer-epos">—</p>
+      <h3 class="drawer__sub">Bedryfsure</h3>
+      <p class="drawer__hours" id="drawer-hours"></p>
+    </div>
+  </aside>
+
+  <!-- Bedrag -->
+  <div class="overlay" id="amount-modal" role="dialog" aria-modal="true" aria-labelledby="amount-modal-title">
+    <div class="modal">
+      <button type="button" class="close-btn" id="close-amount" aria-label="Sluit">&times;</button>
+      <div class="modal-title" id="amount-modal-title">Betaal</div>
+      <div class="modal-sub" id="amount-modal-sub">Voer die bedrag in Ora in.</div>
+      <div class="input-wrap">
+        <span class="input-prefix" aria-hidden="true">Ф</span>
+        <input id="amount-input" type="number" min="1" step="1" inputmode="decimal" placeholder="0" autocomplete="off" />
+      </div>
+      <div class="rate-hint" id="rate-hint">Haal wisselkoers…</div>
+      <button type="button" class="btn btn--block" id="btn-get-invoice" disabled>Maak faktuur</button>
+    </div>
+  </div>
+
+  <!-- Faktuur -->
+  <div class="overlay" id="invoice-modal" role="dialog" aria-modal="true" aria-labelledby="invoice-modal-title">
+    <div class="modal modal--invoice">
+      <button type="button" class="close-btn" id="close-invoice" aria-label="Sluit">&times;</button>
+      <div class="invoice-success-top" id="invoice-success-top" hidden aria-live="polite">
+        <p class="paid-kind" id="paid-invoice-kind"></p>
+        <p class="paid-shop" id="paid-shop-name"></p>
+        <p class="paid-ora" id="paid-ora-amount"></p>
+      </div>
+      <p class="invoice-biz" id="invoice-modal-biz"></p>
+      <div class="modal-title" id="invoice-modal-title">Betaal</div>
+      <div class="modal-sub" id="invoice-modal-sub">Tik op die kode vir jou beursie, of skandeer of kopieer.</div>
+      <div class="qr-wrap">
+        <a id="qr-link" href="#" class="qr-link" title="Tik vir Lightning beursie">
+          <canvas id="qr-canvas" width="240" height="240" aria-label="Faktuur QR"></canvas>
+        </a>
+        <img
+          id="success-icon"
+          class="qr-success-mark"
+          src="assets/orania-logo.svg"
+          width="200"
+          height="200"
+          alt="Betaling ontvang"
+          hidden
+        />
+      </div>
+      <div class="status-line" id="status-line">
+        <span class="spinner" id="poll-spinner"></span>
+        <span id="status-text">Wag vir betaling…</span>
+      </div>
+      <p class="paid-msg" id="paid-msg" hidden>Betaling ontvang. Dankie.</p>
+      <button type="button" class="invoice-copy" id="invoice-copy">Kopieer faktuur</button>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" crossorigin=""></script>
+  <script src="assets/qrcode.min.js"></script>
+  <script src="assets/lud21.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

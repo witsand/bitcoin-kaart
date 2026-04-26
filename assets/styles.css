@@ -1,0 +1,719 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0d0d1a;
+  --surface: #1a1a2e;
+  --surface-2: #20203a;
+  --text: #e2e8f0;
+  --muted: #8892a4;
+  --border: #2d2d4a;
+  --radius: 14px;
+  --topbar-h: 52px;
+  --search-h: 48px;
+  --drawer-radius: 20px 20px 0 0;
+  --accent: #3b82f6;
+  --modal-accent: #3b82f6;
+  --map-tiles-filter: none;
+  color-scheme: dark;
+}
+
+html[data-theme="light"] {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --surface-2: #eef0f4;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --map-tiles-filter: brightness(0.96) contrast(1.02);
+  color-scheme: light;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.topbar {
+  flex-shrink: 0;
+  height: var(--topbar-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.75rem 0 1rem;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  z-index: 1000;
+}
+
+.topbar__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Segmented control */
+.seg {
+  display: flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 2px;
+}
+
+.seg__btn {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.45rem 0.7rem;
+  border-radius: 8px;
+  cursor: pointer;
+  min-width: 3.2rem;
+}
+
+.seg__btn.is-active {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.iconbtn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.iconbtn:hover, .seg__btn:hover { opacity: 0.92; }
+
+.filter-bar {
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.45rem 0.75rem 0.5rem;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  z-index: 999;
+}
+
+.filter-bar .chips {
+  flex: 1 1 0;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.map-opts {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 0.1rem 0;
+}
+
+.map-opts__label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text);
+  user-select: none;
+}
+
+.map-opts__label input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--accent, #3b82f6);
+  cursor: pointer;
+}
+
+.map-opts__text { white-space: nowrap; }
+
+.search-row {
+  flex-shrink: 0;
+  padding: 0.4rem 1rem 0.5rem;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  z-index: 999;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
+}
+
+.search-input::placeholder { color: var(--muted); }
+.search-input:focus { border-color: var(--accent, #3b82f6); }
+
+.app-main {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+.view--map { position: absolute; inset: 0; }
+.view--list {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.75rem 1rem 5rem;
+}
+
+.map-root {
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  filter: var(--map-tiles-filter);
+}
+
+/* Leaflet default z-index is high; keep UI above map controls area via topbar only */
+.leaflet-control-container .leaflet-top { top: 8px; }
+
+/* Category chips */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+#filter-bar .chips { margin-bottom: 0; }
+
+.chip {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.8rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.chip.is-active {
+  background: var(--accent, #3b82f6);
+  border-color: var(--accent, #3b82f6);
+  color: #fff;
+}
+
+.biz-list { list-style: none; }
+.biz-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  border-radius: 10px;
+  margin: 0 -0.3rem;
+}
+.biz-list li:hover, .biz-list li:focus { background: var(--surface-2); }
+.biz-list__icon { font-size: 1.35rem; line-height: 1; }
+.biz-list__logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.biz-list__name { font-weight: 600; font-size: 0.98rem; }
+
+/* Drawer */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.drawer-backdrop.is-open { opacity: 1; pointer-events: auto; }
+
+.drawer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 85dvh;
+  background: var(--surface);
+  border-radius: var(--drawer-radius);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  z-index: 2001;
+  padding: 0.4rem 1.25rem 1.25rem;
+  box-shadow: 0 -8px 32px rgba(0,0,0,0.35);
+  transform: translateY(110%);
+  transition: transform 0.28s ease;
+  overflow: auto;
+}
+.drawer.is-open { transform: translateY(0); }
+.drawer__handle {
+  width: 40px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 0.25rem auto 0.5rem;
+}
+.drawer__close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 8px;
+}
+.drawer__close:hover { color: var(--text); }
+
+.drawer__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding-right: 2rem;
+}
+.drawer__icon { font-size: 1.75rem; line-height: 1.1; }
+.drawer__title { font-size: 1.2rem; font-weight: 700; line-height: 1.2; }
+.drawer__cat { font-size: 0.8rem; color: var(--muted); margin: 0.35rem 0 0.4rem; }
+
+.drawer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.drawer__web {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--accent, #3b82f6);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.drawer__web:hover { border-bottom-color: var(--accent, #3b82f6); }
+
+.drawer__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.btn {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+.btn--primary { background: var(--accent, #3b82f6); color: #fff; }
+.btn--secondary {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn--block { width: 100%; margin-top: 0.25rem; }
+.btn-text {
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  color: var(--accent, #3b82f6);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.5rem 0;
+  cursor: pointer;
+}
+.btn-ghost {
+  width: 100%;
+  margin-bottom: 0.35rem;
+  padding: 0.4rem 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  background: none;
+  border: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  text-align: left;
+}
+.btn-ghost:hover { color: var(--text); }
+.drawer__more { margin-top: 0.5rem; padding-top: 0.75rem; border-top: 1px solid var(--border); }
+.drawer__sub { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 0.5rem 0 0.25rem; }
+.drawer__desc, .drawer__hours, .drawer__addr, .drawer__foon, .drawer__epos { font-size: 0.9rem; line-height: 1.5; color: var(--text); }
+.drawer__epos-link {
+  color: var(--accent, #3b82f6);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  word-break: break-all;
+}
+.drawer__epos-link:hover { border-bottom-color: var(--accent, #3b82f6); }
+.drawer__desc { color: var(--muted); }
+.drawer__logo {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Modals */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(3px);
+  z-index: 3000;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.overlay.open { display: flex; }
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 420px;
+  padding: 1.5rem 1.25rem;
+  position: relative;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+}
+
+.modal--invoice { max-width: 380px; text-align: center; }
+.modal--invoice .modal-sub { text-align: center; }
+.invoice-biz {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 0.35rem;
+  line-height: 1.35;
+  padding: 0 0.5rem;
+}
+.invoice-success-top[hidden] {
+  display: none !important;
+}
+.invoice-success-top {
+  margin: 0 0 0.5rem;
+  text-align: center;
+}
+.paid-kind {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin: 0 0 0.2rem;
+  line-height: 1.2;
+}
+.paid-shop {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 0.25rem;
+  line-height: 1.3;
+}
+.paid-ora {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--modal-accent, #3b82f6);
+  margin: 0;
+  line-height: 1.2;
+}
+.invoice-copy[hidden] {
+  display: none !important;
+}
+
+.modal-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; }
+.modal-sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 1.25rem; }
+
+.close-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.close-btn:hover { color: var(--text); }
+
+.input-wrap { position: relative; margin-bottom: 0.6rem; }
+.input-prefix {
+  position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%);
+  color: var(--muted); font-size: 1rem; pointer-events: none; font-weight: 600;
+}
+#amount-input {
+  width: 100%;
+  padding: 0.75rem 0.9rem 0.75rem 2.1rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 1.1rem;
+  outline: none;
+}
+#amount-input:focus { border-color: var(--modal-accent, #3b82f6); }
+
+.rate-hint { font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem; min-height: 1.2em; }
+.rate-hint.error { color: #f87171; }
+#btn-get-invoice {
+  background: var(--modal-accent, #3b82f6);
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+#btn-get-invoice:hover { opacity: 0.9; }
+#btn-get-invoice:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.qr-wrap {
+  display: flex; align-items: center; justify-content: center;
+  width: 240px; height: 240px; margin: 0.75rem auto 1rem;
+  position: relative;
+}
+.qr-link { display: block; line-height: 0; }
+#qr-canvas {
+  border-radius: 10px; border: 2px solid var(--border);
+  cursor: pointer; max-width: 100%;
+}
+/* Moet wees dat [hidden] nie deur display:flex oorheers word nie */
+.qr-success-mark[hidden] {
+  display: none !important;
+}
+.qr-success-mark:not([hidden]) {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+}
+.status-line {
+  font-size: 0.85rem; color: var(--muted);
+  min-height: 1.3em; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+}
+.spinner {
+  width: 14px; height: 14px;
+  border: 2px solid var(--border);
+  border-top-color: var(--modal-accent, #888);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite; flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.paid-msg { color: #4ade80; font-size: 1rem; font-weight: 600; margin: 0.5rem 0; }
+.invoice-copy {
+  display: block; width: 100%;
+  margin-top: 0.75rem; padding: 0.6rem 0.75rem;
+  font-size: 0.8rem; color: var(--text);
+  text-align: center;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer; font-family: inherit;
+  transition: border-color 0.15s;
+}
+.invoice-copy:hover { border-color: var(--modal-accent, #555); }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); border: 0;
+}
+
+/* Map marker (Leaflet divIcon) — eenvormige sirkel-merker vir logo en emoji */
+.marker-pin {
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  overflow: visible;
+}
+.marker-pin__rot {
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.marker-pin__logo-box {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #f1f5f9;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
+}
+html[data-theme="dark"] .marker-pin__logo-box {
+  background: #e2e8f0;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.12);
+}
+.marker-pin__logo-box--emoji {
+  background: var(--surface-2, #1e1e2e);
+}
+html[data-theme="light"] .marker-pin__logo-box--emoji {
+  background: #e8ecf2;
+}
+.marker-pin__emoji {
+  font-size: 1rem;
+  line-height: 1;
+  display: block;
+  transform: translateY(0.5px);
+}
+.marker-pin__logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  flex-shrink: 0;
+}
+.btn:disabled, .drawer__row .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+html[data-theme="light"] .map-root .leaflet-tile { filter: var(--map-tiles-filter); }
+
+/* Jou posisie (Leaflet-kontrole + merker) */
+.locate-control.leaflet-bar {
+  border: none;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 12px !important;
+  margin-right: 10px !important;
+}
+a.locate-control__btn,
+.locate-control__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  line-height: 1;
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+  font-size: 1.15rem;
+  text-decoration: none;
+  transition: color 0.15s, background 0.15s;
+}
+.locate-control__btn:hover { filter: brightness(1.08); }
+.locate-control__btn.is-active {
+  color: var(--accent) !important;
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+.user-loc-marker {
+  background: none !important;
+  border: none !important;
+}
+.user-loc-dot {
+  width: 16px;
+  height: 16px;
+  background: #3b82f6;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.5), 0 2px 8px rgba(0,0,0,0.25);
+  animation: userPulse 2.4s ease-out infinite;
+}
+@keyframes userPulse {
+  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5), 0 2px 8px rgba(0,0,0,0.2); }
+  70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0), 0 2px 8px rgba(0,0,0,0.2); }
+  100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0), 0 2px 8px rgba(0,0,0,0.2); }
+}
+html[data-theme="light"] .user-loc-dot { border-color: #fff; }
+
+/* Permanente besigheidsname naas merkers */
+.map-pin-label.leaflet-tooltip {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  padding: 0.2rem 0.45rem 0.25rem !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+  max-width: 11rem;
+  white-space: normal;
+  text-align: left;
+  pointer-events: none;
+}
+.map-pin-label.leaflet-tooltip::before { display: none; }
+
+/* Markercluster: tema, tellings — nabye merkers grogroepeer, zoom/spinnekop wys hulle */
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+  background: transparent !important;
+}
+.marker-cluster-small > div,
+.marker-cluster-medium > div,
+.marker-cluster-large > div {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 2px solid var(--border) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  font-weight: 700;
+}
+html[data-theme="light"] .marker-cluster-small > div,
+html[data-theme="light"] .marker-cluster-medium > div,
+html[data-theme="light"] .marker-cluster-large > div {
+  background: #fff !important;
+}
+.leaflet-cluster-anim .leaflet-marker-icon,
+.leaflet-cluster-anim .leaflet-marker-shadow { transition: transform 0.3s ease-out, opacity 0.3s ease-out; }
