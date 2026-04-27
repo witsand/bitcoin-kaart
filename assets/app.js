@@ -8,6 +8,7 @@
   var IKONE = {
     koffie: '☕',
     restaurant: '🍴',
+    butchery: '🥩',
     winkel: '🛍️',
     kroeg: '🍺',
     juwele: '💍',
