@@ -22,17 +22,11 @@
     </div>
   </header>
 
-  <div class="filter-bar" id="filter-bar">
-    <div class="chips" id="category-chips" role="group" aria-label="Kategorieë (kaart en lys)"></div>
-    <div class="map-opts" id="map-opts">
-      <label class="map-opts__label">
-        <input type="checkbox" id="pin-labels-toggle" />
-        <span class="map-opts__text">Wys name by merkers</span>
-      </label>
-    </div>
-  </div>
-
   <div class="search-row" id="search-row" hidden>
+    <div class="list-filters">
+      <label class="visually-hidden" for="list-category-select">Kategorie</label>
+      <select id="list-category-select" class="category-select" aria-label="Kategorie (lys)"></select>
+    </div>
     <label class="visually-hidden" for="list-search">Soek besighede</label>
     <input type="search" id="list-search" class="search-input" placeholder="Soek…" autocomplete="off" />
   </div>
@@ -40,6 +34,19 @@
   <main class="app-main">
     <section class="view view--map" id="view-map" aria-label="Kaart">
       <div id="map" class="map-root"></div>
+      <div class="map-filters" id="map-filters">
+        <button type="button" class="map-filters__toggle" id="map-filters-toggle" aria-controls="map-filters-panel" aria-expanded="false" aria-label="Wys of versteek filters">Filters</button>
+        <div class="map-filters__panel" id="map-filters-panel" role="group" aria-label="Kaartfilters" hidden>
+          <div class="map-filters__field">
+            <label class="map-filters__lbl" for="category-select">Kategorie</label>
+            <select id="category-select" class="category-select" aria-label="Kategorie (kaart)"></select>
+          </div>
+          <div class="map-filters__field map-filters__field--row">
+            <input type="checkbox" id="pin-labels-toggle" />
+            <label for="pin-labels-toggle" class="map-filters__name-lbl">Name</label>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="view view--list" id="view-list" hidden aria-label="Gids">
