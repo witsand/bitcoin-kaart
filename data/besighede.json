@@ -157,8 +157,8 @@
     {
       "id": "kruispad-vleismeester",
       "naam": "Kruispad Vleismeester",
-      "kategorie": "Butchery",
-      "ikoon": "butchery",
+      "kategorie": "Slaghuis",
+      "ikoon": "slaghuis",
       "kleur": "#b91c1c",
       "koördinate": { "lat": -29.8139361, "lng": 24.4096074 },
       "logoLêer": null,
