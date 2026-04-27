@@ -138,13 +138,16 @@
           if (onTick) onTick();
           if (data.settled) {
             onSettled();
-            return;
+            return true; /* verhoed verdere peiling */
           }
+          return false;
         })
         .catch(function () {
           failCount++;
+          return false;
         })
-        .then(function () {
+        .then(function (done) {
+          if (done) return;
           var delay = failCount > 2 ? 10000 : 2000;
           schedule(delay);
         });
