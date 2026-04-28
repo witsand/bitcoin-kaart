@@ -78,19 +78,21 @@ body {
 
 .seg__btn {
   border: none;
-  background: transparent;
-  color: var(--muted);
+  background: var(--surface);
+  color: var(--text);
   font-size: 0.85rem;
   font-weight: 600;
   padding: 0.45rem 0.7rem;
   border-radius: 8px;
   cursor: pointer;
   min-width: 3.2rem;
+  border: 1px solid var(--border);
 }
 
-.seg__btn.is-active {
-  background: var(--surface-2);
-  color: var(--text);
+.seg__btn--single:hover { opacity: 0.92; }
+
+.seg__btn--single {
+  background: var(--surface);
 }
 
 .iconbtn {
@@ -311,6 +313,33 @@ html[data-theme="dark"] .map-filters__panel {
 }
 
 .biz-list { list-style: none; }
+.biz-list__group {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 1.05rem 0.6rem 0.55rem;
+  margin: 0.2rem -0.3rem 0;
+  cursor: default;
+  color: var(--muted);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+}
+.biz-list__group:hover { background: transparent !important; }
+.biz-list__group-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+  color: var(--text);
+}
+.biz-list__meta {
+  margin-left: auto;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
 .biz-list li {
   display: flex;
   align-items: center;
@@ -417,6 +446,12 @@ html[data-theme="dark"] .map-filters__panel {
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem;
   margin-bottom: 0.75rem;
+}
+.drawer__row.is-single {
+  grid-template-columns: 1fr;
+}
+.drawer__row .btn[hidden] {
+  display: none !important;
 }
 
 .btn {

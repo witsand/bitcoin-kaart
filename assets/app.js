@@ -16,6 +16,7 @@
     dienste: '🔧',
     argitektuur: '🏛️',
     organisasie: '🤝',
+    naaldwerk: '🧵',
     algemeen: '📍'
   };
 
@@ -46,6 +47,20 @@
     return !!(s && String(s).trim());
   }
 
+  function isActive(b) {
+    // Default: aktief, unless explicitly false
+    return !(b && b.aktief === false);
+  }
+
+  function coordsOf(b) {
+    if (!b) return null;
+    // Support both spellings (diacritics vary in JSON edits)
+    var c = b.koördinate || b.koordinate || null;
+    if (!c) return null;
+    if (typeof c.lat !== 'number' || typeof c.lng !== 'number') return null;
+    return c;
+  }
+
   function logoPath(b) {
     if (!b || !b.logoLêer) return null;
     return 'assets/logos/' + b.logoLêer;
@@ -55,8 +70,9 @@
     return document.documentElement.getAttribute('data-theme') === 'dark';
   }
 
-  function getAccent(b) {
-    return (b && b.kleur) || '#3b82f6';
+  function getAccent() {
+    // `kleur` removed from data; keep a consistent accent.
+    return '#3b82f6';
   }
 
   function setModalAccent(hex) {
@@ -117,6 +133,8 @@
     markersLayer = createMarkerClusterGroup().addTo(map);
     userLocationGroup = L.layerGroup().addTo(map);
     addLocateControl();
+    addFitAllControl();
+    cleanupAttribution();
   }
 
   function addLocateControl() {
@@ -140,6 +158,52 @@
       }
     });
     map.addControl(new Locate());
+  }
+
+  function addFitAllControl() {
+    var FitAll = L.Control.extend({
+      options: { position: 'bottomright' },
+      onAdd: function () {
+        var wrap = L.DomUtil.create('div', 'leaflet-bar locate-control');
+        var btn = L.DomUtil.create('a', 'locate-control__btn', wrap);
+        btn.href = '#';
+        btn.title = 'Zoom om alle besighede te wys';
+        btn.setAttribute('role', 'button');
+        btn.setAttribute('aria-label', 'Zoom om alle besighede te wys');
+        btn.innerHTML = '⤢';
+        L.DomEvent.on(btn, 'mousedown dblclick', L.DomEvent.stopPropagation);
+        L.DomEvent.on(btn, 'click', function (ev) {
+          L.DomEvent.preventDefault(ev);
+          fitAllMarkers();
+        });
+        return wrap;
+      }
+    });
+    map.addControl(new FitAll());
+  }
+
+  function cleanupAttribution() {
+    // Defensive: remove any extra badge/flag in attribution bar (e.g. tiles adding a 🇺🇦 banner)
+    setTimeout(function () {
+      var el = document.querySelector('.leaflet-control-attribution');
+      if (!el) return;
+      Array.from(el.querySelectorAll('a,img,span')).forEach(function (n) {
+        var href = (n.getAttribute && n.getAttribute('href')) || '';
+        var src = (n.getAttribute && n.getAttribute('src')) || '';
+        var txt = (n.textContent || '').toLowerCase();
+        var alt = ((n.getAttribute && n.getAttribute('alt')) || '').toLowerCase();
+        if (
+          href.toLowerCase().indexOf('ukraine') >= 0 ||
+          src.toLowerCase().indexOf('ukraine') >= 0 ||
+          txt.indexOf('ukraine') >= 0 ||
+          alt.indexOf('ukraine') >= 0 ||
+          txt.indexOf('🇺🇦') >= 0 ||
+          alt.indexOf('🇺🇦') >= 0
+        ) {
+          n.remove();
+        }
+      });
+    }, 250);
   }
 
   function onLocateButtonClick(e) {
@@ -228,7 +292,7 @@
 
   function createMarker(b) {
     var emoji = iconEmoji(b);
-    var border = escapeHtml(b.kleur || '#94a3b8');
+    var border = escapeHtml('#94a3b8');
     var lp = logoPath(b);
     var inner = lp
       ? '<div class="marker-pin__rot"><div class="marker-pin__logo-box">' +
@@ -245,7 +309,8 @@
       iconSize: [40, 40],
       iconAnchor: [20, 38]
     });
-    var m = L.marker([b.koördinate.lat, b.koördinate.lng], { icon: el, title: b.naam });
+    var c = coordsOf(b);
+    var m = L.marker([c.lat, c.lng], { icon: el, title: b.naam });
     if (showPinLabels && b.naam) {
       m.bindTooltip(b.naam, {
         permanent: true,
@@ -263,6 +328,8 @@
 
   function mapVisibleBusinesses() {
     return businesses.filter(function (b) {
+      if (!isActive(b)) return false;
+      if (!coordsOf(b)) return false;
       if (selectedCategories === null) return true;
       var k = b.kategorie || '';
       return selectedCategories.has(k);
@@ -275,7 +342,8 @@
     if (!list.length) return;
     var bounds = L.latLngBounds(
       list.map(function (b) {
-        return [b.koördinate.lat, b.koördinate.lng];
+        var c = coordsOf(b);
+        return [c.lat, c.lng];
       })
     );
     map.fitBounds(bounds, { padding: [48, 48], maxZoom: 16 });
@@ -292,6 +360,7 @@
   function uniqueCategories() {
     var c = new Set();
     businesses.forEach(function (b) {
+      if (!isActive(b)) return;
       if (b.kategorie) c.add(b.kategorie);
     });
     return Array.from(c).sort();
@@ -306,6 +375,7 @@
   function filteredBusinesses() {
     var q = ($('list-search') && $('list-search').value.trim().toLowerCase()) || '';
     return businesses.filter(function (b) {
+      if (!isActive(b)) return false;
       if (!categoryMatches(b)) return false;
       if (!q) return true;
       var n = (b.naam || '').toLowerCase();
@@ -393,12 +463,30 @@
     return d.innerHTML;
   }
 
+  function categoryIconEmoji(cat) {
+    var s = String(cat || '').toLowerCase();
+    if (s.indexOf('restaurant') >= 0) return IKONE.restaurant;
+    if (s.indexOf('koffie') >= 0) return IKONE.koffie;
+    if (s.indexOf('slagh') >= 0) return IKONE.slaghuis;
+    if (s.indexOf('winkel') >= 0) return IKONE.winkel;
+    if (s.indexOf('verblyf') >= 0 || s.indexOf('gaste') >= 0) return IKONE.verblyf;
+    if (s.indexOf('juwel') >= 0) return IKONE.juwele;
+    if (s.indexOf('argitekt') >= 0) return IKONE.argitektuur;
+    if (s.indexOf('diens') >= 0) return IKONE.dienste;
+    if (s.indexOf('organ') >= 0) return IKONE.organisasie;
+    if (s.indexOf('naald') >= 0 || s.indexOf('naal') >= 0) return IKONE.naaldwerk;
+    if (s.indexOf('kroeg') >= 0 || s.indexOf('bar') >= 0) return IKONE.kroeg;
+    return IKONE.algemeen;
+  }
+
   function renderList() {
     var ul = $('list-items');
     if (!ul) return;
     ul.innerHTML = '';
     var rows = filteredBusinesses();
     rows.sort(function (a, b) {
+      var ca = (a.kategorie || '').localeCompare(b.kategorie || '', 'af', { sensitivity: 'base' });
+      if (ca !== 0) return ca;
       return (a.naam || '').localeCompare(b.naam || '', 'af', { sensitivity: 'base' });
     });
     if (!rows.length) {
@@ -409,7 +497,31 @@
       ul.appendChild(li0);
       return;
     }
+    var lastCat = null;
     rows.forEach(function (b) {
+      var cat = b.kategorie || 'Ander';
+      if (cat !== lastCat) {
+        lastCat = cat;
+        var h = document.createElement('li');
+        h.className = 'biz-list__group';
+        h.setAttribute('role', 'listitem');
+        var hi = document.createElement('span');
+        hi.className = 'biz-list__group-icon';
+        hi.setAttribute('aria-hidden', 'true');
+        hi.textContent = categoryIconEmoji(cat);
+        h.appendChild(hi);
+        var ht = document.createElement('span');
+        ht.textContent = cat;
+        h.appendChild(ht);
+        var meta = document.createElement('span');
+        meta.className = 'biz-list__meta';
+        var count = rows.filter(function (x) {
+          return (x.kategorie || 'Ander') === cat;
+        }).length;
+        meta.textContent = String(count);
+        h.appendChild(meta);
+        ul.appendChild(h);
+      }
       var li = document.createElement('li');
       li.setAttribute('role', 'listitem');
       var lp = logoPath(b);
@@ -441,12 +553,19 @@
       li.appendChild(nm);
       li.addEventListener('click', function () {
         openDrawer(b);
-        if (map) {
-          map.flyTo([b.koördinate.lat, b.koördinate.lng], getMaxFocusZoom(), { duration: 0.5 });
-        }
+        var c = coordsOf(b);
+        if (map && c) map.flyTo([c.lat, c.lng], getMaxFocusZoom(), { duration: 0.5 });
       });
       ul.appendChild(li);
     });
+  }
+
+  function updateToggleViewButton() {
+    var b = $('btn-toggle-view');
+    if (!b) return;
+    var isMap = currentView === 'map';
+    b.textContent = isMap ? 'Lys' : 'Kaart';
+    b.setAttribute('aria-label', isMap ? 'Wys lys' : 'Wys kaart');
   }
 
   function setView(view) {
@@ -454,10 +573,7 @@
     var isMap = view === 'map';
     $('view-map').hidden = !isMap;
     $('view-list').hidden = isMap;
-    $('btn-view-map').classList.toggle('is-active', isMap);
-    $('btn-view-list').classList.toggle('is-active', !isMap);
-    $('btn-view-map').setAttribute('aria-pressed', isMap);
-    $('btn-view-list').setAttribute('aria-pressed', !isMap);
+    updateToggleViewButton();
     if ($('search-row')) {
       $('search-row').hidden = isMap;
     }
@@ -467,9 +583,10 @@
     if (map) {
       setTimeout(function () {
         map.invalidateSize();
-        if (isMap && activeBiz && activeBiz.koördinate) {
+        var c = coordsOf(activeBiz);
+        if (isMap && activeBiz && c) {
           map.flyTo(
-            [activeBiz.koördinate.lat, activeBiz.koördinate.lng],
+            [c.lat, c.lng],
             getMaxFocusZoom(),
             { duration: 0.75 }
           );
@@ -556,17 +673,15 @@
     setDrawerWebLinks(b);
     var payOk = hasStr(b.betaalLightningAdres);
     var tipOk = hasStr(b.fooitjieLightningAdres);
+    var row = document.querySelector('.drawer__row');
+    if (row) row.classList.toggle('is-single', (payOk && !tipOk) || (!payOk && tipOk));
     if ($('drawer-btn-pay')) {
-      $('drawer-btn-pay').disabled = !payOk;
-      $('drawer-btn-pay').title = payOk
-        ? ''
-        : 'Geen betaal-Lightning-adres in besighede.json — voeg een by.';
+      if (payOk) $('drawer-btn-pay').removeAttribute('hidden');
+      else $('drawer-btn-pay').setAttribute('hidden', '');
     }
     if ($('drawer-btn-tip')) {
-      $('drawer-btn-tip').disabled = !tipOk;
-      $('drawer-btn-tip').title = tipOk
-        ? ''
-        : 'Geen fooitjie-Lightning-adres in besighede.json — voeg een by.';
+      if (tipOk) $('drawer-btn-tip').removeAttribute('hidden');
+      else $('drawer-btn-tip').setAttribute('hidden', '');
     }
     var more = $('drawer-more');
     var btnMore = $('drawer-btn-more');
@@ -575,7 +690,7 @@
       btnMore.setAttribute('aria-expanded', 'false');
       btnMore.textContent = 'Meer inligting';
     }
-    setModalAccent(getAccent(b));
+    setModalAccent(getAccent());
     var dw = document.getElementById('drawer');
     var bd = document.getElementById('drawer-backdrop');
     if (dw) {
@@ -592,7 +707,7 @@
   function updateGotoMapVisibility() {
     var btn = $('drawer-goto-map');
     if (!btn) return;
-    if (activeBiz && currentView === 'list') {
+    if (activeBiz && currentView === 'list' && coordsOf(activeBiz)) {
       btn.removeAttribute('hidden');
     } else {
       btn.setAttribute('hidden', '');
@@ -618,7 +733,7 @@
 
   function openAmountModal() {
     if (!activeBiz) return;
-    setModalAccent(getAccent(activeBiz));
+    setModalAccent(getAccent());
     var isTip = payMode === 'tip';
     var addr = isTip ? activeBiz.fooitjieLightningAdres : activeBiz.betaalLightningAdres;
     if (!addr) {
@@ -783,7 +898,7 @@
 
   function openInvoiceModal(pr, verifyUrl, msats, oraAmount) {
     closeAmountModal();
-    if (activeBiz) setModalAccent(getAccent(activeBiz));
+    if (activeBiz) setModalAccent(getAccent());
     var isTip = payMode === 'tip';
     lastInvoice = {
       pr: pr,
@@ -954,11 +1069,8 @@
   }
 
   function wire() {
-    $('btn-view-map').addEventListener('click', function () {
-      setView('map');
-    });
-    $('btn-view-list').addEventListener('click', function () {
-      setView('list');
+    $('btn-toggle-view').addEventListener('click', function () {
+      setView(currentView === 'map' ? 'list' : 'map');
     });
     $('btn-theme').addEventListener('click', toggleTheme);
     $('drawer-close').addEventListener('click', closeDrawer);
@@ -1064,4 +1176,5 @@
   initPinLabelOption();
   wire();
   loadData();
+  updateToggleViewButton();
 })();
