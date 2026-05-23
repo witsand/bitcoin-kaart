@@ -207,7 +207,7 @@
     },
     {
       "id": "melk-en-heuning-uitspan",
-      "aktief": false,
+      "aktief": true,
       "naam": "Melk & Heuning Uitspan",
       "kategorie": "Verblyf",
       "ikoon": "verblyf",
