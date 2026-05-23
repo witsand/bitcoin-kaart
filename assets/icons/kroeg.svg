@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-label="Kroeg">
+  <!-- Pint glass with foam  reads at map-pin size -->
+  <path fill="#D97706" d="M7 3h10l-1.2 15H8.2L7 3z"/>
+  <path fill="#FEF3C7" d="M7 3h10v4.5H7V3z"/>
+  <ellipse cx="12" cy="5.2" rx="4.2" ry="1.1" fill="#FFFBEB" opacity="0.9"/>
+  <path fill="#92400E" d="M8.5 18h7v2.5H8.5V18z"/>
+  <path fill="#B45309" d="M9 20.5h6v1H9v-1z"/>
+</svg>

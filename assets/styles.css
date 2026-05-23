@@ -736,7 +736,8 @@ html[data-theme="light"] .marker-pin__logo-box--emoji {
   display: block;
   transform: translateY(0.5px);
 }
-.marker-pin__logo {
+.marker-pin__logo,
+.marker-pin__ikoon {
   width: 24px;
   height: 24px;
   object-fit: contain;
@@ -744,6 +745,16 @@ html[data-theme="light"] .marker-pin__logo-box--emoji {
   display: block;
   flex-shrink: 0;
 }
+.marker-pin__ikoon { width: 22px; height: 22px; }
+
+.biz-list__ikoon,
+.drawer__ikoon {
+  width: 1.35rem;
+  height: 1.35rem;
+  object-fit: contain;
+  display: block;
+}
+.drawer__ikoon { width: 1.75rem; height: 1.75rem; }
 .btn:disabled, .drawer__row .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 html[data-theme="light"] .map-root .leaflet-tile { filter: var(--map-tiles-filter); }

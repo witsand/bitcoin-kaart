@@ -17,7 +17,13 @@
     argitektuur: '🏛️',
     organisasie: '🤝',
     naaldwerk: '🧵',
+    gas: '🔥',
     algemeen: '📍'
+  };
+
+  var IKONE_SVG = {
+    kroeg: 'assets/icons/kroeg.svg',
+    gas: 'assets/icons/gas.svg'
   };
 
   var businesses = [];
@@ -82,6 +88,29 @@
   function iconEmoji(b) {
     if (b.ikoon && IKONE[b.ikoon]) return IKONE[b.ikoon];
     return b.ikoonEmoji || IKONE.algemeen;
+  }
+
+  function ikoonSvgPath(b) {
+    return b && b.ikoon && IKONE_SVG[b.ikoon] ? IKONE_SVG[b.ikoon] : null;
+  }
+
+  function setIkoonElement(el, b, imgClass) {
+    if (!el) return;
+    el.innerHTML = '';
+    var svg = ikoonSvgPath(b);
+    if (svg && !logoPath(b)) {
+      var img = document.createElement('img');
+      img.src = svg;
+      img.alt = '';
+      img.className = imgClass;
+      img.loading = 'lazy';
+      img.addEventListener('error', function () {
+        el.textContent = iconEmoji(b);
+      });
+      el.appendChild(img);
+      return;
+    }
+    el.textContent = iconEmoji(b);
   }
 
   function getMaxFocusZoom() {
@@ -294,15 +323,22 @@
     var emoji = iconEmoji(b);
     var border = escapeHtml('#94a3b8');
     var lp = logoPath(b);
+    var svg = ikoonSvgPath(b);
     var inner = lp
       ? '<div class="marker-pin__rot"><div class="marker-pin__logo-box">' +
         '<img class="marker-pin__logo" src="' +
         escapeHtml(lp) +
         '" alt="" loading="lazy" width="24" height="24"/>' +
         '</div></div>'
-      : '<div class="marker-pin__rot"><div class="marker-pin__logo-box marker-pin__logo-box--emoji"><span class="marker-pin__emoji" aria-hidden="true">' +
-        escapeHtml(emoji) +
-        '</span></div></div>';
+      : svg
+        ? '<div class="marker-pin__rot"><div class="marker-pin__logo-box marker-pin__logo-box--emoji">' +
+          '<img class="marker-pin__ikoon" src="' +
+          escapeHtml(svg) +
+          '" alt="" loading="lazy" width="22" height="22"/>' +
+          '</div></div>'
+        : '<div class="marker-pin__rot"><div class="marker-pin__logo-box marker-pin__logo-box--emoji"><span class="marker-pin__emoji" aria-hidden="true">' +
+          escapeHtml(emoji) +
+          '</span></div></div>';
     var el = L.divIcon({
       className: 'marker-wrap',
       html: '<div class="marker-pin" style="border-color:' + border + '">' + inner + '</div>',
@@ -476,6 +512,7 @@
     if (s.indexOf('organ') >= 0) return IKONE.organisasie;
     if (s.indexOf('naald') >= 0 || s.indexOf('naal') >= 0) return IKONE.naaldwerk;
     if (s.indexOf('kroeg') >= 0 || s.indexOf('bar') >= 0) return IKONE.kroeg;
+    if (s.indexOf('gas') >= 0 || s.indexOf('lpg') >= 0) return IKONE.gas;
     return IKONE.algemeen;
   }
 
@@ -536,7 +573,7 @@
           var sp = document.createElement('span');
           sp.className = 'biz-list__icon';
           sp.setAttribute('aria-hidden', 'true');
-          sp.textContent = iconEmoji(b);
+          setIkoonElement(sp, b, 'biz-list__ikoon');
           li.insertBefore(sp, li.firstChild);
         });
         li.appendChild(im);
@@ -544,7 +581,7 @@
         var sp0 = document.createElement('span');
         sp0.className = 'biz-list__icon';
         sp0.setAttribute('aria-hidden', 'true');
-        sp0.textContent = iconEmoji(b);
+        setIkoonElement(sp0, b, 'biz-list__ikoon');
         li.appendChild(sp0);
       }
       var nm = document.createElement('span');
@@ -639,11 +676,11 @@
       im.alt = '';
       im.loading = 'lazy';
       im.addEventListener('error', function () {
-        ic.textContent = iconEmoji(b);
+        setIkoonElement(ic, b, 'drawer__ikoon');
       });
       ic.appendChild(im);
     } else {
-      ic.textContent = iconEmoji(b);
+      setIkoonElement(ic, b, 'drawer__ikoon');
     }
   }
 
