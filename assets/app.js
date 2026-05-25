@@ -18,12 +18,14 @@
     organisasie: '🤝',
     naaldwerk: '🧵',
     gas: '🔥',
+    toep: '📱',
     algemeen: '📍'
   };
 
   var IKONE_SVG = {
     kroeg: 'assets/icons/kroeg.svg',
-    gas: 'assets/icons/gas.svg'
+    gas: 'assets/icons/gas.svg',
+    toep: 'assets/icons/toep.svg'
   };
 
   var businesses = [];
@@ -319,6 +321,14 @@
     tileLayer = L.tileLayer(t.url, t.options).addTo(map);
   }
 
+  function markerIkoonImgOnerror() {
+    return (
+      ' onerror="this.onerror=null;var s=document.createElement(\'span\');' +
+      's.className=\'marker-pin__emoji\';s.setAttribute(\'aria-hidden\',\'true\');' +
+      's.textContent=this.getAttribute(\'data-fallback\')||\'📍\';this.replaceWith(s);"'
+    );
+  }
+
   function createMarker(b) {
     var emoji = iconEmoji(b);
     var border = escapeHtml('#94a3b8');
@@ -334,7 +344,11 @@
         ? '<div class="marker-pin__rot"><div class="marker-pin__logo-box marker-pin__logo-box--emoji">' +
           '<img class="marker-pin__ikoon" src="' +
           escapeHtml(svg) +
-          '" alt="" loading="lazy" width="22" height="22"/>' +
+          '" alt="" loading="lazy" width="22" height="22" data-fallback="' +
+          escapeHtml(emoji) +
+          '"' +
+          markerIkoonImgOnerror() +
+          '/>' +
           '</div></div>'
         : '<div class="marker-pin__rot"><div class="marker-pin__logo-box marker-pin__logo-box--emoji"><span class="marker-pin__emoji" aria-hidden="true">' +
           escapeHtml(emoji) +
@@ -499,31 +513,12 @@
     return d.innerHTML;
   }
 
-  function categoryIconEmoji(cat) {
-    var s = String(cat || '').toLowerCase();
-    if (s.indexOf('restaurant') >= 0) return IKONE.restaurant;
-    if (s.indexOf('koffie') >= 0) return IKONE.koffie;
-    if (s.indexOf('slagh') >= 0) return IKONE.slaghuis;
-    if (s.indexOf('winkel') >= 0) return IKONE.winkel;
-    if (s.indexOf('verblyf') >= 0 || s.indexOf('gaste') >= 0) return IKONE.verblyf;
-    if (s.indexOf('juwel') >= 0) return IKONE.juwele;
-    if (s.indexOf('argitekt') >= 0) return IKONE.argitektuur;
-    if (s.indexOf('diens') >= 0) return IKONE.dienste;
-    if (s.indexOf('organ') >= 0) return IKONE.organisasie;
-    if (s.indexOf('naald') >= 0 || s.indexOf('naal') >= 0) return IKONE.naaldwerk;
-    if (s.indexOf('kroeg') >= 0 || s.indexOf('bar') >= 0) return IKONE.kroeg;
-    if (s.indexOf('gas') >= 0 || s.indexOf('lpg') >= 0) return IKONE.gas;
-    return IKONE.algemeen;
-  }
-
   function renderList() {
     var ul = $('list-items');
     if (!ul) return;
     ul.innerHTML = '';
     var rows = filteredBusinesses();
     rows.sort(function (a, b) {
-      var ca = (a.kategorie || '').localeCompare(b.kategorie || '', 'af', { sensitivity: 'base' });
-      if (ca !== 0) return ca;
       return (a.naam || '').localeCompare(b.naam || '', 'af', { sensitivity: 'base' });
     });
     if (!rows.length) {
@@ -534,31 +529,7 @@
       ul.appendChild(li0);
       return;
     }
-    var lastCat = null;
     rows.forEach(function (b) {
-      var cat = b.kategorie || 'Ander';
-      if (cat !== lastCat) {
-        lastCat = cat;
-        var h = document.createElement('li');
-        h.className = 'biz-list__group';
-        h.setAttribute('role', 'listitem');
-        var hi = document.createElement('span');
-        hi.className = 'biz-list__group-icon';
-        hi.setAttribute('aria-hidden', 'true');
-        hi.textContent = categoryIconEmoji(cat);
-        h.appendChild(hi);
-        var ht = document.createElement('span');
-        ht.textContent = cat;
-        h.appendChild(ht);
-        var meta = document.createElement('span');
-        meta.className = 'biz-list__meta';
-        var count = rows.filter(function (x) {
-          return (x.kategorie || 'Ander') === cat;
-        }).length;
-        meta.textContent = String(count);
-        h.appendChild(meta);
-        ul.appendChild(h);
-      }
       var li = document.createElement('li');
       li.setAttribute('role', 'listitem');
       var lp = logoPath(b);

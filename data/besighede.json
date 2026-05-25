@@ -2,7 +2,7 @@
   "besighede": [
     {
       "id": "knapsak",
-      "aktief": false,
+      "aktief": true,
       "naam": "Knapsak",
       "kategorie": "Winkel",
       "ikoon": "winkel",
@@ -264,6 +264,22 @@
       "ikoon": "gas",
       "logoLêer": null,
       "beskrywing": "LPG-gas: silinders, herlaai en aflewering.",
+      "fisieseAdres": "",
+      "foon": "",
+      "epos": "",
+      "webwerf": "",
+      "bedryfsure": "",
+      "betaalLightningAdres": "",
+      "fooitjieLightningAdres": ""
+    },
+    {
+      "id": "smultoep",
+      "aktief": true,
+      "naam": "Smultoep",
+      "kategorie": "Toep",
+      "ikoon": "toep",
+      "logoLêer": "smultoep.png",
+      "beskrywing": "",
       "fisieseAdres": "",
       "foon": "",
       "epos": "",
