@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-label="Motorparts">
+  <!-- Gear -->
+  <path fill="#64748B" d="M10.75 6.05h2.55l.42 2.58 2.4-.93 1.8 3.05-2.06 1.47 2.06 1.47-1.8 3.05-2.4-.93-.42 2.58h-2.55l-.42-2.58-2.4.93-1.8-3.05 2.06-1.47-2.06-1.47 1.8-3.05 2.4.93.42-2.58z"/>
+  <circle cx="12.02" cy="12.04" r="2.95" fill="#E2E8F0"/>
+  <circle cx="12.02" cy="12.04" r="1.05" fill="#475569"/>
+  <!-- Wrench shaft + head -->
+  <path fill="#94A3B8" stroke="#475569" stroke-width="0.45" stroke-linejoin="round" d="m15.95 13.62 6.82 6.9a1.52 1.52 0 0 1-2.08 2.2l-.18-.17-7.82-8.82 1.3-2.72 2.92 3.72z"/>
+  <ellipse cx="20.72" cy="21.82" rx="1.62" ry="2.62" transform="rotate(-43 20.72 21.82)" fill="none" stroke="#475569" stroke-width="1.25"/>
+</svg>

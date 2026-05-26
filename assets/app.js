@@ -19,13 +19,19 @@
     naaldwerk: '🧵',
     gas: '🔥',
     toep: '📱',
+    parte: '⚙️',
+    brandstof: '⛽',
+    stoor: '📦',
     algemeen: '📍'
   };
 
   var IKONE_SVG = {
     kroeg: 'assets/icons/kroeg.svg',
     gas: 'assets/icons/gas.svg',
-    toep: 'assets/icons/toep.svg'
+    toep: 'assets/icons/toep.svg',
+    parte: 'assets/icons/parte.svg',
+    brandstof: 'assets/icons/brandstof.svg',
+    stoor: 'assets/icons/stoor.svg'
   };
 
   var businesses = [];

@@ -60,7 +60,7 @@ Elke item kan bv. so lyk (veld `koördinate` gebruik `ö` in die sleutel na aan 
 ```
 
 - **epos** (opsioneel): e-posadres; wys in die laai as `mailto:`-skakel; weglaat of `""` vir geen
-- **ikoon** (keuse): `koffie` | `restaurant` | `winkel` | `kroeg` | `juwele` | `verblyf` | `dienste` | `argitektuur` | `organisasie` | `toep` | `gas` (anders: emoji in `ikoonEmoji` indien jy dit verkies)
+- **ikoon** (keuse): `koffie` | `restaurant` | `winkel` | `kroeg` | `juwele` | `verblyf` | `dienste` | `argitektuur` | `organisasie` | `naaldwerk` | `slaghuis` | `toep` | `gas` | `parte` | `brandstof` | `stoor` (anders: emoji in `ikoonEmoji` indien jy dit verkies); `kroeg`, `gas`, `toep`, `parte`, `brandstof` en `stoor` gebruik `assets/icons/*.svg` waar beskikbaar
 - **logoLêer**: lêernaam in `assets/logos/` (bv. `logo.png`) of `null` om die ikoon te gebruik
 - **webwerf** / **webwerf2**: opsionele skakels (tweedes bv. hotel by dieselfde plek)
 - **Ora (Ф)**: 1 Ф = 1 ZAR (sats word uit BTC/ZAR bereken)

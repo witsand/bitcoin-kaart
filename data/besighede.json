@@ -31,7 +31,7 @@
       "epos": "",
       "webwerf": "",
       "bedryfsure": "",
-      "betaalLightningAdres": "",
+      "betaalLightningAdres": "mengelmoes@blink.sv",
       "fooitjieLightningAdres": ""
     },
     {
@@ -48,15 +48,15 @@
       "epos": "",
       "webwerf": "",
       "bedryfsure": "",
-      "betaalLightningAdres": "",
+      "betaalLightningAdres": "riaanels99@blink.sv",
       "fooitjieLightningAdres": ""
     },
     {
       "id": "orania-sakekamer",
       "aktief": true,
       "naam": "Orania Sakekamer",
-      "kategorie": "Dienste",
-      "ikoon": "dienste",
+      "kategorie": "Organisasie",
+      "ikoon": "organisasie",
       "koördinate": { "lat": -29.815128527270012, "lng": 24.409477880613313 },
       "logoLêer": "orania-sakekamer.svg",
       "beskrywing": "Plaaslike sakekamer sedert 2004: netwerk, opleiding, lede- en sake-ondersteuning, bevordering van die plaaslike ekonomie, en projekte soos dOra en betrokkenheid by Radiokanaal- en gemeenskapsake.",
@@ -236,7 +236,7 @@
       "epos": "",
       "webwerf": "",
       "bedryfsure": "",
-      "betaalLightningAdres": "menh@blink.sv",
+      "betaalLightningAdres": "",
       "fooitjieLightningAdres": ""
     },
     {
@@ -253,7 +253,7 @@
       "epos": "",
       "webwerf": "",
       "bedryfsure": "",
-      "betaalLightningAdres": "",
+      "betaalLightningAdres": "BellaBlom@blink.sv",
       "fooitjieLightningAdres": ""
     },
     {
@@ -262,6 +262,7 @@
       "naam": "Gasman",
       "kategorie": "Gas",
       "ikoon": "gas",
+      "koördinate": { "lat": -29.812813336402314, "lng": 24.408727183132456 },
       "logoLêer": null,
       "beskrywing": "LPG-gas: silinders, herlaai en aflewering.",
       "fisieseAdres": "",
@@ -269,7 +270,7 @@
       "epos": "",
       "webwerf": "",
       "bedryfsure": "",
-      "betaalLightningAdres": "",
+      "betaalLightningAdres": "OraniaGasman@blink.sv",
       "fooitjieLightningAdres": ""
     },
     {
@@ -285,7 +286,75 @@
       "epos": "",
       "webwerf": "",
       "bedryfsure": "",
+      "betaalLightningAdres": "Smultoep@blink.sv",
+      "fooitjieLightningAdres": ""
+    },
+    {
+      "id": "stora",
+      "aktief": true,
+      "naam": "STORA Stoor Ruimtes",
+      "kategorie": "Stoor",
+      "ikoon": "stoor",
+      "koördinate": { "lat": -29.82393995960245, "lng": 24.394621679765606 },
+      "logoLêer": null,
+      "beskrywing": "Stoorruimtes.",
+      "fisieseAdres": "",
+      "foon": "",
+      "epos": "",
+      "webwerf": "",
+      "bedryfsure": "",
+      "betaalLightningAdres": "menh@blink.sv",
+      "fooitjieLightningAdres": ""
+    },
+    {
+      "id": "kontreiwinkel",
+      "aktief": true,
+      "naam": "Kontreiwinkel",
+      "kategorie": "Winkel",
+      "ikoon": "winkel",
+      "koördinate": { "lat": -29.813371563312035, "lng": 24.40948383134096 },
+      "logoLêer": null,
+      "beskrywing": "Scrapbookbenodighede en -klasse, Kuns en Naaldwerk benodighede, Skryfbehoeftes, Drukwerk, Laminering, Mans -en damesklere, Lekkernye, Geskenke, Iets van alles!",
+      "fisieseAdres": "",
+      "foon": "",
+      "epos": "",
+      "webwerf": "",
+      "bedryfsure": "",
       "betaalLightningAdres": "",
+      "fooitjieLightningAdres": ""
+    },
+    {
+      "id": "rylaan",
+      "aktief": true,
+      "naam": "Rylaan",
+      "kategorie": "Brandstof",
+      "ikoon": "brandstof",
+      "koördinate": { "lat": -29.81372346296993, "lng": 24.409545189084405 },
+      "logoLêer": null,
+      "beskrywing": "",
+      "fisieseAdres": "",
+      "foon": "",
+      "epos": "",
+      "webwerf": "",
+      "bedryfsure": "",
+      "betaalLightningAdres": "knapsak@blink.sv",
+      "fooitjieLightningAdres": ""
+    },
+    {
+      "id": "orania-parte",
+      "aktief": true,
+      "naam": "Orania Parte",
+      "kategorie": "Parte",
+      "ikoon": "parte",
+      "koördinate": { "lat": -29.813689586327595, "lng": 24.409026643697132 },
+      "logoLêer": null,
+      "beskrywing": "",
+      "fisieseAdres": "",
+      "foon": "",
+      "epos": "",
+      "webwerf": "",
+      "bedryfsure": "",
+      "betaalLightningAdres": "knapsak@blink.sv",
       "fooitjieLightningAdres": ""
     }
   ]
