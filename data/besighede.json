@@ -341,10 +341,10 @@
       "fooitjieLightningAdres": ""
     },
     {
-      "id": "orania-parte",
+      "id": "orania-motors",
       "aktief": true,
-      "naam": "Orania Parte",
-      "kategorie": "Parte",
+      "naam": "Orania Motors",
+      "kategorie": "Kar Parte",
       "ikoon": "parte",
       "koördinate": { "lat": -29.813689586327595, "lng": 24.409026643697132 },
       "logoLêer": null,
