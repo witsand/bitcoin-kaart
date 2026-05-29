@@ -25,6 +25,7 @@
     karre: '🚗',
     vervoer: '🚐',
     babas: '👶',
+    hardeware: '🔨',
     algemeen: '📍'
   };
 
@@ -37,7 +38,8 @@
     stoor: 'assets/icons/stoor.svg',
     karre: 'assets/icons/karre.svg',
     vervoer: 'assets/icons/vervoer.svg',
-    babas: 'assets/icons/babas.svg'
+    babas: 'assets/icons/babas.svg',
+    hardeware: 'assets/icons/hardeware.svg'
   };
 
   var businesses = [];
