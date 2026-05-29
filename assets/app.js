@@ -22,6 +22,9 @@
     parte: '⚙️',
     brandstof: '⛽',
     stoor: '📦',
+    karre: '🚗',
+    vervoer: '🚐',
+    babas: '👶',
     algemeen: '📍'
   };
 
@@ -31,7 +34,10 @@
     toep: 'assets/icons/toep.svg',
     parte: 'assets/icons/parte.svg',
     brandstof: 'assets/icons/brandstof.svg',
-    stoor: 'assets/icons/stoor.svg'
+    stoor: 'assets/icons/stoor.svg',
+    karre: 'assets/icons/karre.svg',
+    vervoer: 'assets/icons/vervoer.svg',
+    babas: 'assets/icons/babas.svg'
   };
 
   var businesses = [];

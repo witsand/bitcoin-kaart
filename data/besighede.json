@@ -356,6 +356,56 @@
       "bedryfsure": "",
       "betaalLightningAdres": "knapsak@blink.sv",
       "fooitjieLightningAdres": ""
+    },
+    {
+      "id": "eleksa",
+      "aktief": true,
+      "naam": "Eleksa",
+      "kategorie": "Karre",
+      "ikoon": "karre",
+      "koördinate": { "lat": -29.814364867408234, "lng": 24.415262402155328 },
+      "logoLêer": null,
+      "beskrywing": "",
+      "fisieseAdres": "",
+      "foon": "",
+      "epos": "",
+      "webwerf": "",
+      "bedryfsure": "",
+      "betaalLightningAdres": "eleksa@blink.sv",
+      "fooitjieLightningAdres": ""
+    },
+    {
+      "id": "eleksa-pendel",
+      "aktief": true,
+      "naam": "Eleksa Pendel",
+      "kategorie": "Vervoer",
+      "ikoon": "vervoer",
+      "koördinate": { "lat": -29.81369910595557, "lng": 24.409748948214816 },
+      "logoLêer": null,
+      "beskrywing": "",
+      "fisieseAdres": "",
+      "foon": "",
+      "epos": "",
+      "webwerf": "",
+      "bedryfsure": "",
+      "betaalLightningAdres": "eleksa@blink.sv",
+      "fooitjieLightningAdres": ""
+    },
+    {
+      "id": "baba-reus",
+      "aktief": true,
+      "naam": "Baba Reus",
+      "kategorie": "Babas",
+      "ikoon": "babas",
+      "logoLêer": null,
+      "beskrywing": "",
+      "fisieseAdres": "",
+      "foon": "",
+      "epos": "",
+      "webwerf": "",
+      "bedryfsure": "",
+      "betaalLightningAdres": "",
+      "fooitjieLightningAdres": ""
     }
   ]
 }
