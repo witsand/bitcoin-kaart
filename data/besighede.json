@@ -225,19 +225,19 @@
     {
       "id": "sonskip-aardskip",
       "aktief": true,
-      "naam": "Sonskip / Aardskip",
+      "naam": "Sonskip/Aardskip",
       "kategorie": "Verblyf",
       "ikoon": "verblyf",
       "koördinate": { "lat": -29.81664537258803, "lng": 24.41133484126567 },
       "logoLêer": null,
-      "beskrywing": "Selfsorg gastehuis",
-      "fisieseAdres": "",
-      "foon": "",
-      "epos": "",
+      "beskrywing": "Sonskip - Gaste kamers (NIE selfsorg of bed en ontbyt NIE), Aardskip - Lewende museum - outargiese lewe - off-grid.",
+      "fisieseAdres": "207 Robynlaan",
+      "foon": "076 488 3398 of 073 134 9671",
+      "epos": "info@aardskip.com",
       "webwerf": "",
-      "bedryfsure": "",
-      "betaalLightningAdres": "",
-      "fooitjieLightningAdres": ""
+      "bedryfsure": "8:30 - 16:30. Aardskip voor 12:00, Sonskip inboek na 14:00 uit 10:00",
+      "betaalLightningAdres": "ludwig@blink.sv",
+      "fooitjieLightningAdres": "ludwig@blink.sv"
     },
     {
       "id": "bella-blom-naaldwerk-vervaardiging",
@@ -456,6 +456,23 @@
       "webwerf": "",
       "bedryfsure": "",
       "betaalLightningAdres": "boerdery@blink.sv",
+      "fooitjieLightningAdres": ""
+    },
+    {
+      "id": "oewer-restaurant",
+      "aktief": true,
+      "naam": "Oewer Restaurant",
+      "kategorie": "Restaurant",
+      "ikoon": "restaurant",
+      "koördinate": { "lat": -29.799874174338488, "lng": 24.42124529464141 },
+      "logoLêer": null,
+      "beskrywing": "",
+      "fisieseAdres": "",
+      "foon": "",
+      "epos": "",
+      "webwerf": "",
+      "bedryfsure": "",
+      "betaalLightningAdres": "oewer1@blink.sv",
       "fooitjieLightningAdres": ""
     }
   ]
